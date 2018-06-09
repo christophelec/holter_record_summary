@@ -1,8 +1,8 @@
 class Wave:
     def __init__(self, _type, onset, offset, tags=None):
         self.type = _type
-        self.onset = onset
-        self.offset = offset
+        self.onset = int(onset)
+        self.offset = int(offset)
         self.tags = tags
 
     def __str__(self):

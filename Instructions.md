@@ -9,10 +9,10 @@ an algorithm output for a 24h ECG:
     https://cardiologs-public.s3.amazonaws.com/python-interview/record.csv
 
 Rows have the following fields:
-    - Wave type: P, QRS, T or INV (invalid)
-    - Wave onset: Start of the wave in ms
-    - Wave offset: End of the wave in ms
-    - Optionally, a list of wave tags
+- Wave type: P, QRS, T or INV (invalid)
+- Wave onset: Start of the wave in ms
+- Wave offset: End of the wave in ms
+- Optionally, a list of wave tags
 
 Using Python 3, write a simple console program that provides the following
 measurements to a physician:
