@@ -15,6 +15,10 @@ class TestWave:
         waves = hrs.extract_waves(input_rows)
         assert [str(w) for w in waves] == expected
 
+    def test_wave_creation_fail(self):
+        with pytest.raises(RuntimeError):
+            hrs.extract_waves([['P']])
+
     @pytest.mark.parametrize('input_waves, expected', [([], 0),
                                                        ([Wave('P', '32', '33', ['premature'])], 1),
                                                        ([Wave('QRS', '32', '33', ['premature'])], 1),
@@ -27,3 +31,9 @@ class TestWave:
     def test_get_premature_waves(self, input_waves, expected):
         waves = hrs.get_premature_waves(input_waves)
         assert len(waves) == expected
+
+    def test_mean_heart_rate(self):
+        qrs_waves = [Wave('QRS', '0', '59000'),
+                     Wave('QRS', '60000', '60001')]
+        expected = 2.0
+        assert hrs.calculate_mean_heart_rate(qrs_waves) == expected
