@@ -37,3 +37,8 @@ class TestWave:
                      Wave('QRS', '60000', '60001')]
         expected = 2.0
         assert hrs.calculate_mean_heart_rate(qrs_waves) == expected
+
+    def test_mean_heart_rate_fails(self):
+        qrs_waves = [Wave('QRS', '0', '59000')]
+        with pytest.raises(RuntimeError):
+            hrs.calculate_mean_heart_rate(qrs_waves)
