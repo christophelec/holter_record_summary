@@ -42,3 +42,20 @@ class TestWave:
         qrs_waves = [Wave('QRS', '0', '59000')]
         with pytest.raises(RuntimeError):
             hrs.calculate_mean_heart_rate(qrs_waves)
+
+    def test_min_heart_rate(self):
+        qrs_waves = [Wave('QRS', '0', '59000'),
+                     Wave('QRS', '60000', '60001'),
+                     Wave('QRS', '60001', '60002')]
+        assert hrs.min_time_heart_rate(qrs_waves) == (2.0, 60000)
+
+    def test_max_heart_rate(self):
+        qrs_waves = [Wave('QRS', '0', '59000'),
+                     Wave('QRS', '60000', '60001'),
+                     Wave('QRS', '60001', '60002')]
+        assert hrs.max_time_heart_rate(qrs_waves) == (120000.0, 60001)
+
+    def test_fail_min_heart_rate(self):
+        qrs_waves = []
+        with pytest.raises(RuntimeError):
+            hrs.max_time_heart_rate(qrs_waves)
