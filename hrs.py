@@ -5,6 +5,7 @@ import begin
 
 from holter_record_summary import Wave
 import holter_record_summary as hrs
+from datetime import datetime
 
 
 def file_to_waves(input_file:str) -> List[Wave]:
@@ -12,21 +13,42 @@ def file_to_waves(input_file:str) -> List[Wave]:
         reader = csv.reader(record)
         return hrs.extract_waves(reader)
 
-@begin.subcommand
-def prematures(input_file: 'CSV file containing the records'):
+
+@begin.subcommand()
+def prematures():
     """Returns a list of premature P and QRS Waves"""
-    waves = file_to_waves(input_file)
+    # last_return is the return of function run() below
+    waves = begin.context.last_return
     p_prem_waves = hrs.get_premature_waves(waves, 'P')
     qrs_prem_waves = hrs.get_premature_waves(waves, 'QRS')
     print('Premature P Waves : {}'.format(len(p_prem_waves)))
     print('Premature QRS Complexes : {}'.format(len(qrs_prem_waves)))
 
 
+@begin.subcommand()
+def mean_heart_rate():
+    """Returns the mean heart rate of the given record"""
+    # last_return is the return of function run() below
+    waves = begin.context.last_return
+    mean_hr = hrs.calculate_mean_heart_rate(waves)
+    print('Mean heart rate : {}'.format(mean_hr))
+
+
+@begin.subcommand()
+def min_max_hr(in_start_timestamp: 'timestamp of the beginning of the record' = '0'):
+    # last_return is the return of function run() below
+    waves = begin.context.last_return
+    min_hr, time_min = hrs.min_time_heart_rate(waves)
+    max_hr, time_max = hrs.max_time_heart_rate(waves)
+    start_timestamp = int(in_start_timestamp)
+    if start_timestamp:
+        print('Min heart rate : {} Date : {}'.format(min_hr, datetime.fromtimestamp(start_timestamp + time_min).isoformat()))
+        print('Max heart rate : {} Date : {}'.format(max_hr, datetime.fromtimestamp(start_timestamp + time_max).isoformat()))
+    else:
+        print('Min heart rate : {} Time : {}'.format(min_hr, time_min))
+        print('Max heart rate : {} Time : {}'.format(max_hr, time_max))
+
+
 @begin.start
-def run(input_file='record.csv'):
-    """Holster Record Summary"""
-    with open(input_file, 'r') as record:
-        reader = csv.reader(record)
-        waves = hrs.extract_waves(reader)
-        #print(get_premature_waves(waves))
-        print(hrs.calculate_mean_heart_rate(waves))
+def run(input_file: 'ĆSV file containing the records'):
+    return file_to_waves(input_file)
