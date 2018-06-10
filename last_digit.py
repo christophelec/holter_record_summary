@@ -1,5 +1,3 @@
-import pytest
-
 def last_digit(n: int) -> int:
     ones = n % 10
     tens = n % 100 - ones

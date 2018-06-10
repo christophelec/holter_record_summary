@@ -8,10 +8,14 @@ import holter_record_summary as hrs
 from datetime import datetime
 
 
-def file_to_waves(input_file:str) -> List[Wave]:
+def file_to_waves(input_file: str) -> List[Wave]:
     with open(input_file, 'r') as record:
         reader = csv.reader(record)
         return hrs.extract_waves(reader)
+
+
+def stamp_to_date(timestamp: int) -> str:
+    return datetime.fromtimestamp(timestamp).isoformat()
 
 
 @begin.subcommand()
@@ -35,16 +39,19 @@ def mean_heart_rate():
 
 
 @begin.subcommand()
-def min_max_hr(in_start_timestamp: 'timestamp of the beginning of the record' = '0'):
-    """Returns the minimal and maximal heart rate, along with the time it appeared"""
+def min_max_hr(start_timestamp: 'Start timestamp of the record' = '0'):
+    """Returns the minimal and maximal heart rate,
+    along with the time it appeared"""
     # last_return is the return of function run() below
     waves = begin.context.last_return
     min_hr, time_min = hrs.min_time_heart_rate(waves)
     max_hr, time_max = hrs.max_time_heart_rate(waves)
-    start_timestamp = int(in_start_timestamp)
-    if start_timestamp:
-        print('Min heart rate : {} Date : {}'.format(min_hr, datetime.fromtimestamp(start_timestamp + time_min).isoformat()))
-        print('Max heart rate : {} Date : {}'.format(max_hr, datetime.fromtimestamp(start_timestamp + time_max).isoformat()))
+    _start_timestamp = int(start_timestamp)
+    if _start_timestamp:
+        print('Min heart rate : {} Date : {}'.format(
+            min_hr, stamp_to_date(_start_timestamp + time_min)))
+        print('Max heart rate : {} Date : {}'.format(
+            max_hr, stamp_to_date(_start_timestamp + time_max)))
     else:
         print('Min heart rate : {} Time : {}'.format(min_hr, time_min))
         print('Max heart rate : {} Time : {}'.format(max_hr, time_max))

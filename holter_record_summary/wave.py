@@ -57,3 +57,4 @@ def extract_waves(rows: csv.reader) -> List[Wave]:
         return [Wave(row[0], row[1], row[2], row[3:]) for row in rows]
     except IndexError as e:
         raise RuntimeError('Poorly formatted row') from e
+
