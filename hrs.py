@@ -36,6 +36,7 @@ def mean_heart_rate():
 
 @begin.subcommand()
 def min_max_hr(in_start_timestamp: 'timestamp of the beginning of the record' = '0'):
+    """Returns the minimal and maximal heart rate, along with the time it appeared"""
     # last_return is the return of function run() below
     waves = begin.context.last_return
     min_hr, time_min = hrs.min_time_heart_rate(waves)
