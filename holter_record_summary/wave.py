@@ -1,10 +1,12 @@
 import csv
 from typing import List, Tuple
 
+MS_IN_A_MINUTE = 60000
+
 
 class Wave:
-    def __init__(self, _type, onset, offset, tags=None):
-        self.type = _type
+    def __init__(self, w_type, onset, offset, tags=None):
+        self.type = w_type
         self.onset = int(onset)
         self.offset = int(offset)
         self.tags = tags
@@ -27,7 +29,7 @@ def calculate_mean_heart_rate(waves: List[Wave]) -> float:
     if len(qrs_waves) < 2:
         raise RuntimeError('Not enough QRS waves to calculate a heart rate')
     total_time = qrs_waves[-1].onset - qrs_waves[0].onset
-    return len(qrs_waves) / (total_time / 60000)
+    return len(qrs_waves) / (total_time / MS_IN_A_MINUTE)
 
 
 def min_time_heart_rate(waves: List[Wave]) -> Tuple[float, int]:
