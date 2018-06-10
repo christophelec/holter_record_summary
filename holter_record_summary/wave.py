@@ -22,22 +22,24 @@ def get_qrs(waves: List[Wave]) -> List[Wave]:
     return [wave for wave in waves if wave.type == 'QRS']
 
 
-def calculate_mean_heart_rate(qrs_waves: List[Wave]) -> float:
+def calculate_mean_heart_rate(waves: List[Wave]) -> float:
+    qrs_waves = get_qrs(waves)
     if len(qrs_waves) < 2:
         raise RuntimeError('Not enough QRS waves to calculate a heart rate')
     total_time = qrs_waves[-1].onset - qrs_waves[0].onset
     return len(qrs_waves) / (total_time / 60000)
 
 
-def min_time_heart_rate(qrs_waves: List[Wave]) -> Tuple[float, int]:
-    return _time_heart_rate(qrs_waves, lambda x, y: x < y)
+def min_time_heart_rate(waves: List[Wave]) -> Tuple[float, int]:
+    return _time_heart_rate(waves, lambda x, y: x < y)
 
 
-def max_time_heart_rate(qrs_waves: List[Wave]) -> Tuple[float, int]:
-    return _time_heart_rate(qrs_waves, lambda x, y: x > y)
+def max_time_heart_rate(waves: List[Wave]) -> Tuple[float, int]:
+    return _time_heart_rate(waves, lambda x, y: x > y)
 
 
-def _time_heart_rate(qrs_waves: List[Wave], cmp_func) -> Tuple[float, int]:
+def _time_heart_rate(waves: List[Wave], cmp_func) -> Tuple[float, int]:
+    qrs_waves = get_qrs(waves)
     if len(qrs_waves) < 2:
         raise RuntimeError('Not enough QRS waves to calculate a heart rate')
     kept_hr = None

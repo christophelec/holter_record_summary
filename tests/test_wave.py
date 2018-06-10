@@ -46,14 +46,17 @@ class TestWave:
 
     def test_min_heart_rate(self):
         qrs_waves = [Wave('QRS', '0', '59000'),
+                     Wave('P', '60000', '60001'),
                      Wave('QRS', '60000', '60001'),
                      Wave('QRS', '60001', '60002')]
         assert holter_record_summary.wave.min_time_heart_rate(qrs_waves) == (2.0, 60000)
 
     def test_max_heart_rate(self):
         qrs_waves = [Wave('QRS', '0', '59000'),
+                     Wave('P', '60000', '60001'),
                      Wave('QRS', '60000', '60001'),
-                     Wave('QRS', '60001', '60002')]
+                     Wave('QRS', '60001', '60002'),
+                     Wave('QRS', '60004', '60005')]
         assert holter_record_summary.wave.max_time_heart_rate(qrs_waves) == (120000.0, 60001)
 
     def test_fail_min_heart_rate(self):
